@@ -9,7 +9,7 @@ namespace ChatGptHelper.Settings
     public static class Settings
     {
         public static string SettingsPath { get; set; } = "settings.json";
-        public static SettingsModel Data { get; private set; }
+        public static SettingsModel Data { get; set; }
         /// <summary>
         /// Saving in JSON all settings
         /// </summary>

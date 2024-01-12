@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Forms = System.Windows.Forms;
 
 namespace ChatGptHelper
 {
@@ -22,6 +13,36 @@ namespace ChatGptHelper
         public ChatWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.Manual;
+            this.Left = SystemParameters.PrimaryScreenWidth - this.Width;
+            this.Top = SystemParameters.PrimaryScreenHeight - this.Height;
+            TraySettings();
         }
+        public void WordElementsVisible(bool value)
+        {
+            var vis = value ? Visibility.Visible : Visibility.Collapsed;
+            docListBox.Visibility = vis;
+            wordActionBox.Visibility = vis;
+        }
+        public void TraySettings()
+        {
+            Forms.NotifyIcon notifyIcon = new Forms.NotifyIcon();
+            notifyIcon.Icon = new System.Drawing.Icon("Icon.ico");
+            notifyIcon.DoubleClick += (sender, args) =>
+            {
+                this.Show();               
+            };            
+            
+            notifyIcon.ContextMenu = new Forms.ContextMenu();
+            notifyIcon.ContextMenu.MenuItems.Add("Выход", (sender, args) =>
+            {
+                this.CloseApplication();
+            });
+
+            notifyIcon.Visible = true;            
+        }
+        public void CloseApplication() => Application.Current.Shutdown();
+        private void closeButton_Click(object sender, RoutedEventArgs e) => this.Hide();
     }
+  
 }

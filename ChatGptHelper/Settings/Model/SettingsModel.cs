@@ -8,8 +8,7 @@ namespace ChatGptHelper.Settings.Model
 {
     [Serializable]
     public class SettingsModel
-    {
-        public string UserName { get; set; }
+    {        
         public string ApiKey { get; set; }
         public string SystemPrompt {  get; set; }
         public string[] DefaultRequest { get; set; }

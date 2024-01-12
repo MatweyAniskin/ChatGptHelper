@@ -1,50 +1,35 @@
-﻿using ChatGptHelper.Pages.Start;
-using ChatGptHelper.Settings;
+﻿using ChatGptHelper.Pages;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using static ChatGptHelper.Pages.PagesDelegates;
 
 namespace ChatGptHelper
 {
     public partial class MainWindow : Window
-    {
-        int page = 0;
-        DialogPage[] dialogPages;
+    {           
         public MainWindow()
         {
-            InitializeComponent();
-            bool isUser = Settings.Settings.Load();
-            if(isUser) 
+            bool isSetting = Settings.Settings.Load();
+            if (isSetting)
             {
-                ToNextWindow();
+                SetWindow();
                 return;
             }
-            FillDialogPages();
-            NextDialogField();
+            InitializeComponent();                                    
+            SetPage(new LogPage(this));
         }
-        void ToNextWindow()
-        {
-            CatSay($"Рад вас видеть, {Settings.Settings.Data.UserName}");
-            Thread.Sleep(3000);
-            new ChatWindow().Show();
-            this.Hide();
+        void SetPage(Page page) => Main.Content = page;       
+        public void SetWindow() => SetWindow(new ChatWindow());
+        void SetWindow(Window window)
+        {            
+            window.Show();
+            Hide();
         }
-        void FillDialogPages()
+
+        private void closeButton_Click(object sender, RoutedEventArgs e)
         {
-            dialogPages = new DialogPage[]
-           {
-              new NameField(this)
-           };
-        }
-        public void CatSay(string message) => dialogLabel.Content = message;
-        public void NextDialogField()
-        {
-            if(page >= dialogPages.Length)
-            {
-                ToNextWindow();
-                return;
-            }
-            Main.Content = dialogPages[page];
-            page++;
+            Application.Current.Shutdown();
         }
     }
 
