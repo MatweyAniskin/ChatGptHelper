@@ -5,23 +5,24 @@ using System.Windows.Forms;
 using WordWorker.Controller;
 using WordWorker.Worker.Callback;
 using WordWorker.Worker.Model;
+using System.Collections.Generic;
 
 namespace WordWorker.Worker.Controller
 {
     internal class WordController : IWordController
     {
 
-        Word.Application word;
-        Word.Document curDoc;
-
+        Word.Application _word;
+        Word.Document _curDoc;
+        bool _isApplicationInstall = true;
         public event EventHandler<EventArgs> OnNewActiveDoc;
 
         public Word.Document ActiveDocument
         {
-            get => curDoc;
+            get => _curDoc;
             set
             {
-                curDoc = value;                
+                _curDoc = value;                
                 OnNewActiveDoc?.Invoke(objectOfDocument, null);
             }
         }
@@ -30,7 +31,7 @@ namespace WordWorker.Worker.Controller
         {
             get
             {
-                object resultDoc = curDoc;
+                object resultDoc = _curDoc;
                 if (resultDoc != null)
                 {
                     resultDoc = new WordDoc(resultDoc);
@@ -45,21 +46,25 @@ namespace WordWorker.Worker.Controller
             set => throw new NotImplementedException(); 
         }
 
-        public WordDoc[] Documents => throw new NotImplementedException();
+        public IEnumerable<WordDoc> Documents 
+        { 
+            get 
+            { 
+                List<WordDoc> wordDocs = new List<WordDoc>();
+                var e = _word.Documents.GetEnumerator();
+                while(e.MoveNext())
+                {
+                    wordDocs.Add(new WordDoc(e.Current));
+                } 
+                return wordDocs;
+            } 
+        }
+
+        public bool IsDocs => _isApplicationInstall && _word.Documents.Count > 0;
 
         public WordController()
-        {           
-            try
-            {
-                object wordAsObject;
-                wordAsObject = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application");
-                word = (Word.Application)wordAsObject;
-                ActiveDocument = word.Documents.Count == 0 ? null : word.ActiveDocument;                
-            }
-            catch (COMException e)
-            {
-                MessageBox.Show(e.Message);
-            }
+        {
+            Update();
         }        
         public CallType AddText(string text)
         {
@@ -83,7 +88,7 @@ namespace WordWorker.Worker.Controller
             text = string.Empty;
             if (ActiveDocument is null)
                 return CallType.Not_Doc;
-            var selections = word.Selection;
+            var selections = _word.Selection;
             if (selections.Text.Length <= 1)
                 return CallType.Not_Text;
             text = selections.Text;
@@ -94,7 +99,7 @@ namespace WordWorker.Worker.Controller
         {
             if (ActiveDocument is null)
                 return CallType.Not_Doc;
-            var selections = word.Selection;
+            var selections = _word.Selection;
             if (selections.Text.Length <= 1)
                 return CallType.Not_Text;
             selections.Text = text;
@@ -105,9 +110,25 @@ namespace WordWorker.Worker.Controller
         {
             if (ActiveDocument is null)
                 return CallType.Not_Doc;
-            int pos = word.Selection.Range.Start;
+            int pos = _word.Selection.Range.Start;
             ActiveDocument.Content.Text = ActiveDocument.Content.Text.Insert(pos, text);
             return CallType.Success;
+        }
+
+        public void Update()
+        {
+            try
+            {
+                object wordAsObject;
+                wordAsObject = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application");                         
+                _word = (Word.Application)wordAsObject;
+                ActiveDocument = _word.Documents.Count == 0 ? null : _word.ActiveDocument;
+            }
+            catch (COMException e)
+            {
+                _isApplicationInstall = false;
+                MessageBox.Show("Неудалось подключиться к MS Word","Внимание",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            }
         }
     }
 }

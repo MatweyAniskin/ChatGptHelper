@@ -147,10 +147,12 @@
     <Compile Include="ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChatState.cs" />
+    <Compile Include="Models\PropertyRepository.cs" />
+    <Compile Include="Models\PropertyState.cs" />
     <Compile Include="Pages\LogPage.xaml.cs">
       <DependentUpon>LogPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PagesDelegates.cs" />
     <Compile Include="Settings\Model\SettingsModel.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Worker\Callback\Types.cs" />
@@ -212,6 +214,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Send.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" />

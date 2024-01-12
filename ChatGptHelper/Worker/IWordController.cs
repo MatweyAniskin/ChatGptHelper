@@ -13,7 +13,9 @@ namespace WordWorker.Controller
         event EventHandler<EventArgs> OnNewActiveDoc;
         
         WordDoc CurDocument { get; set; }
-        WordDoc[] Documents { get; }
+        IEnumerable<WordDoc> Documents { get; }
+        bool IsDocs {  get; }
+        void Update();
         CallType AddText(string text);
         CallType AddCursorText(string text);
 

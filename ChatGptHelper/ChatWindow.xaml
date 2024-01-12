@@ -12,70 +12,67 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"        
-        Title="ChatWindow" Height="450" Width="450" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="True">
+        FontFamily="{DynamicResource MaterialDesignFont}"         
+        Title="ChatWindow" Height="450" Width="450" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="True" Icon="/Images/Icon.ico">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="4*"/>
             <RowDefinition Height="2*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Row="0" Name="docListBox"  Margin="5,0,5,0">
+            <ComboBox Grid.Row="0" Name="docListBox" SelectionChanged="docListBox_SelectionChanged" Margin="5,0,5,0">
                 
             </ComboBox>
             <Button Content="_" Name="closeButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="1" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>            
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
                 <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <TextBox Margin="5,0,5,0" Text="" materialDesign:HintAssist.Hint="Вопрос"
-                Grid.Row="0" Grid.ColumnSpan="3" TextWrapping="Wrap" 
-                Name="questionsBox" VerticalScrollBarVisibility="Visible" AcceptsReturn="True"
-                Style="{DynamicResource MaterialDesignFloatingHintTextBox}"/>
-            <Grid Grid.Row="1" Name="wordActionBox" Visibility="Visible">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Name = "copyWord"  Content="Копировать" HorizontalAlignment="Center" Grid.Column="0"/>
-                <Button Name = "pasteWord"  Content="Вставить" HorizontalAlignment="Center" Grid.Column="1"/>
-                <Button Name = "swapWord"  Content="Заменить" HorizontalAlignment="Center" Grid.Column="2"/>
-            </Grid>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-            <Button Name="sendButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="1" Width="40" Style="{DynamicResource MaterialDesignPaperButton}">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Images/Send.png" TileMode="None" Stretch="Uniform">
-                        <ImageBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.7" ScaleY="0.7"/>
-                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
-                                <RotateTransform CenterX="0.5" CenterY="0.5"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </ImageBrush.RelativeTransform>
-                    </ImageBrush>
-                </Button.Background>
-            </Button>
-            <StackPanel Grid.Row="0" Grid.RowSpan="2">
-                
-            </StackPanel>
+            <Label VerticalAlignment="Center" Name="actionTypeQuestionBox" Margin="15,0,0,0" Style="{DynamicResource MaterialDesignLabel}">Вопрос</Label>
+            <TextBox Margin="5,0,5,0" Text=""                
+                Grid.Row="1" Grid.ColumnSpan="3" TextWrapping="Wrap" 
+                Name="questionsBox" VerticalScrollBarVisibility="Visible" AcceptsReturn="True"
+                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                     MouseDoubleClick="questionsBox_MouseDoubleClick"/>
+            <Grid Grid.Row="2"  Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Name="wordActionBox">
+                    <Button Name = "copyWord"  Content="Копировать" Margin="5,0,5,0"/>
+                    <Button Name = "pasteWord"  Content="Вставить" Margin="5,0,5,0"/>
+                    <Button Name = "swapWord"  Content="Заменить" Margin="5,0,5,0"/>
+
+                </StackPanel>
+                <Button Name="sendButton" Click="sendButton_Click" HorizontalAlignment="Center" Grid.Column="3" Width="40" Style="{DynamicResource MaterialDesignPaperButton}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Images/Send.png" TileMode="None" Stretch="Uniform">
+                            <ImageBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.7" ScaleY="0.7"/>
+                                    <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                    <RotateTransform CenterX="0.5" CenterY="0.5"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </ImageBrush.RelativeTransform>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+            </Grid>
         </Grid>
+        <ScrollViewer Grid.Row="2" Style="{DynamicResource MaterialDesignScrollViewer}">
+            <StackPanel Name="popularPromptBox" >
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

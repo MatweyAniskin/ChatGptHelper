@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using static ChatGptHelper.Pages.PagesDelegates;
 
 namespace ChatGptHelper
 {
@@ -24,7 +23,7 @@ namespace ChatGptHelper
         void SetWindow(Window window)
         {            
             window.Show();
-            Hide();
+            Close();
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)

@@ -17,24 +17,26 @@ namespace ChatGptHelper.Pages
 {    
     public partial class LogPage : Page
     {
-        MainWindow mainWindow;
-        Brush nonTextColor = Brushes.DarkRed;
-        string[] defaultQuestions = new string[]
+        MainWindow _mainWindow;
+        Brush _nonTextColor = Brushes.DarkRed;
+        string[] _defaultQuestions = new string[]
         {
             "Что это?",
             "Кратко перескажи",
             "Перескажи это другими словами"
         };
+        string _defaultSystemPrompt = "Я говорю на русском языке и хочу чтобы ты был вежлив со мной";
         public LogPage(MainWindow window)
         {
             InitializeComponent();
-            questionsBox.Text = string.Join("\n", defaultQuestions);
-            this.mainWindow = window;
+            questionsBox.Text = string.Join("\n", _defaultQuestions);
+            systemPrompt.Text = _defaultSystemPrompt;
+            this._mainWindow = window;
         }
 
         private void сontinueButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsNotFullTextBox(apiKeyBox) || IsNotFullTextBox(systemPrompt) || IsNotFullTextBox(questionsBox)) return;
+            if (IsNotFullTextBox(apiKeyBox) || IsNotFullTextBox(questionsBox)) return;
             Settings.Settings.Data = new Settings.Model.SettingsModel()
             {
                 ApiKey = apiKeyBox.Text,
@@ -42,13 +44,13 @@ namespace ChatGptHelper.Pages
                 DefaultRequest = questionsBox.Text.Split('\n')
             };
             Settings.Settings.Save();
-            mainWindow.SetWindow();
+            _mainWindow.SetWindow();
         }
         public bool IsNotFullTextBox(TextBox textBox)
         {
             if(textBox.Text.Trim() == string.Empty)
             {
-                textBox.BorderBrush = nonTextColor;
+                textBox.BorderBrush = _nonTextColor;
                 return true;
             }
             return false;
