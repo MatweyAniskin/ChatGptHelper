@@ -40,7 +40,7 @@ namespace ChatGptHelper
         {
             InitializeComponent();
             ChatController.Key = Settings.Settings.Data.ApiKey;
-            _wordController = new WordController();
+            _wordController = new WordController();            
             _propertyRepository = new PropertyRepository();
             CurState = ChatState.Question;
             SetNotify();
@@ -98,7 +98,7 @@ namespace ChatGptHelper
         private void SetKeys()
         {
             _keyboardHook = new GlobalKeyboardHook();
-            _keyboardHook.HookedKeys.Add(Keys.F1);
+            _keyboardHook.HookedKeys.Add(Keys.F2);
             _keyboardHook.KeyUp += ShowWindow;
         }
         private void SetDefaultSendButton()

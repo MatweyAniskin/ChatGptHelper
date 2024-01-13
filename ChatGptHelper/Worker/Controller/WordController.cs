@@ -16,7 +16,8 @@ namespace WordWorker.Worker.Controller
         Word.Document _curDoc;
         bool _isApplicationInstall = true;
         public event EventHandler<EventArgs> OnNewActiveDoc;
-
+        public event EventHandler<EventArgs> OnCloseDoc;
+        public event EventHandler<EventArgs> OnOpenDoc;
         public Word.Document ActiveDocument
         {
             get => _curDoc;
@@ -43,7 +44,7 @@ namespace WordWorker.Worker.Controller
         public WordDoc CurDocument 
         { 
             get => (WordDoc)objectOfDocument; 
-            set => throw new NotImplementedException(); 
+            set => _curDoc = value.Doc; 
         }
 
         public IEnumerable<WordDoc> Documents 
@@ -63,7 +64,7 @@ namespace WordWorker.Worker.Controller
         public bool IsDocs => _isApplicationInstall && _word.Documents.Count > 0;
 
         public WordController()
-        {
+        {            
             Update();
         }        
         public CallType AddText(string text)
