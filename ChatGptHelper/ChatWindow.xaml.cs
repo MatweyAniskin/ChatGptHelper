@@ -1,16 +1,19 @@
 ﻿using ChatGptHelper.ChatApi.Controller;
+using ChatGptHelper.ChatApi.Model;
+using ChatGptHelper.Models;
+using ChatGptHelper.Utilities;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using Forms = System.Windows.Forms;
-using Drawing = System.Drawing;
-using System.IO;
+using System.Windows.Forms;
+using System.Windows.Input;
 using WordWorker.Controller;
 using WordWorker.Worker.Controller;
-using ChatGptHelper.ChatApi.Model;
-using System.Threading.Tasks;
-using ChatGptHelper.Models;
+using WordWorker.Worker.Model;
+using Drawing = System.Drawing;
+using Forms = System.Windows.Forms;
 
 namespace ChatGptHelper
 {
@@ -22,13 +25,15 @@ namespace ChatGptHelper
         IWordController _wordController;
         ChatState _curState;
         PropertyRepository _propertyRepository;
+        Forms.NotifyIcon _notifyIcon;
+        GlobalKeyboardHook _keyboardHook = new GlobalKeyboardHook();
         ChatState CurState
         {
             get => _curState;
             set
             {
-                _curState = value;                
-                ChangeQuestionBoxActionElements();                
+                _curState = value;
+                ChangeQuestionBoxActionElements();
             }
         }
         public ChatWindow()
@@ -38,17 +43,18 @@ namespace ChatGptHelper
             _wordController = new WordController();
             _propertyRepository = new PropertyRepository();
             CurState = ChatState.Question;
-            NotifySettings();
-            AddDefaultSendButton();
-            SetWord();                        
-        }        
+            SetNotify();
+            SetDefaultSendButton();            
+            SetKeys();
+            UpdateWord();
+        }
         public void WordElementsVisible(bool value)
         {
             var vis = value ? Visibility.Visible : Visibility.Collapsed;
             docListBox.Visibility = vis;
             wordActionBox.Visibility = vis;
         }
-        public void NotifySettings()
+        public void SetNotify()
         {
             this.WindowStartupLocation = WindowStartupLocation.Manual;
             double height = SystemParameters.PrimaryScreenHeight;
@@ -57,26 +63,20 @@ namespace ChatGptHelper
             this.Top = height - this.Height - height * 0.05d;
             Drawing.Icon icon = null;
             Uri iconUri = new Uri("pack://application:,,,/ChatGptHelper;component/Images/Icon.ico");
-            using (Stream iconStream = Application.GetResourceStream(iconUri).Stream)
+            using (Stream iconStream = System.Windows.Application.GetResourceStream(iconUri).Stream)
             {
                 icon = new Drawing.Icon(iconStream);
             }
-            Forms.NotifyIcon notifyIcon = new Forms.NotifyIcon();
-            notifyIcon.Icon = icon;
-            notifyIcon.DoubleClick += (sender, args) =>
-            {
-                this.Show();               
-            };            
-            
-            notifyIcon.ContextMenu = new Forms.ContextMenu();
-            notifyIcon.ContextMenu.MenuItems.Add("Выход", (sender, args) =>
-            {
-                this.CloseApplication();
-            });
+            _notifyIcon = new Forms.NotifyIcon();
+            _notifyIcon.Icon = icon;
+            _notifyIcon.DoubleClick += ShowWindow;
 
-            notifyIcon.Visible = true;            
+            _notifyIcon.ContextMenu = new Forms.ContextMenu();
+            _notifyIcon.ContextMenu.MenuItems.Add("Выход", CloseApplication);
+
+            _notifyIcon.Visible = true;
         }
-        public void CloseApplication() => Application.Current.Shutdown();        
+        public void CloseApplication(object sender, EventArgs args) => System.Windows.Application.Current.Shutdown();
         private void ChangeQuestionBoxActionElements()
         {
             var prop = _propertyRepository.GetPropertyState(CurState);
@@ -86,7 +86,7 @@ namespace ChatGptHelper
             questionsBox.Foreground = prop.InfoColor;
             actionTypeQuestionBox.Content = prop.UserInfo;
         }
-        private void SetWord()
+        private void UpdateWord()
         {
             bool isWord = _wordController.IsDocs;
             wordActionBox.Visibility = docListBox.Visibility = isWord ? Visibility.Visible : Visibility.Collapsed;
@@ -95,15 +95,21 @@ namespace ChatGptHelper
             docListBox.ItemsSource = _wordController.Documents;
             docListBox.SelectedItem = _wordController.CurDocument;
         }
-        private void AddDefaultSendButton()
-        {            
+        private void SetKeys()
+        {
+            _keyboardHook = new GlobalKeyboardHook();
+            _keyboardHook.HookedKeys.Add(Keys.F1);
+            _keyboardHook.KeyUp += ShowWindow;
+        }
+        private void SetDefaultSendButton()
+        {
             foreach (var i in Settings.Settings.Data.DefaultRequest)
             {
-                var button = new Button()
+                var button = new System.Windows.Controls.Button()
                 {
                     Content = i,
                     Style = (Style)FindResource("MaterialDesignPaperButton"),
-                    Margin = new Thickness(5),                    
+                    Margin = new Thickness(5),
                 };
                 button.Click += sendDefauldButton_Click;
                 popularPromptBox.Children.Add(button);
@@ -111,26 +117,41 @@ namespace ChatGptHelper
         }
         private async Task SendToBot(string messages)
         {
-            CurState = ChatState.Wait;            
+            CurState = ChatState.Wait;
             var result = (ChatResult)(await ChatController.SendAsync(messages));
             CurState = ChatState.Answer;
             questionsBox.Text = result.ToString();
         }
+        public void ShowWindow(object sender, Forms.KeyEventArgs e) => ShowWindow(sender);
+        public void ShowWindow(object sender, EventArgs e) => ShowWindow(sender);
+        public void ShowWindow(object sender) => this.Show();
         private void closeButton_Click(object sender, RoutedEventArgs e) => this.Hide();
-        
+
         private void questionsBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (CurState != ChatState.Answer)
                 return;
             CurState = ChatState.Question;
         }
-        private async void sendDefauldButton_Click(object sender, RoutedEventArgs e) => await SendToBot($"{((Button)sender).Content}\n{questionsBox.Text}");
+        private async void sendDefauldButton_Click(object sender, RoutedEventArgs e) => await SendToBot($"{((System.Windows.Controls.Button)sender).Content}\n{questionsBox.Text}");
         private async void sendButton_Click(object sender, RoutedEventArgs e) => await SendToBot(questionsBox.Text);
 
         private void docListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if ((WordDoc)docListBox.SelectedItem == _wordController.CurDocument)
+                return;
+            _wordController.CurDocument = (WordDoc)docListBox.SelectedItem;
         }
+
+        private void copyWord_Click(object sender, RoutedEventArgs e)
+        {
+            _wordController.GetDedicatedText(out string text);
+            questionsBox.Text = text;
+        }
+
+        private void pasteWord_Click(object sender, RoutedEventArgs e) => _wordController.AddCursorText(questionsBox.Text);
+
+        private void swapWord_Click(object sender, RoutedEventArgs e) => _wordController.SwapText(questionsBox.Text);
     }
-  
+
 }

@@ -150,11 +150,13 @@
     <Compile Include="Models\ChatState.cs" />
     <Compile Include="Models\PropertyRepository.cs" />
     <Compile Include="Models\PropertyState.cs" />
+    <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Pages\LogPage.xaml.cs">
       <DependentUpon>LogPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\Model\SettingsModel.cs" />
     <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Utilities\GlobalKeyboardHook.cs" />
     <Compile Include="Worker\Callback\Types.cs" />
     <Compile Include="Worker\Controller\WordController.cs" />
     <Compile Include="Worker\Error\WordError.cs" />
