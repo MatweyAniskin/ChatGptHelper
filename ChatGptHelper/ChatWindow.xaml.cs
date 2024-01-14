@@ -118,6 +118,7 @@ namespace ChatGptHelper
         }
         private async Task SendToBot(string messages)
         {
+            if(CurState == ChatState.Wait) return;
             CurState = ChatState.Wait;
             var result = (ChatResult)(await ChatController.SendAsync(messages));
             CurState = ChatState.Answer;

@@ -17,7 +17,7 @@ namespace ChatGptHelper.Models
             {
                 new PropertyState(ChatState.Question, "Вопрос", Brushes.Black,false),
                 new PropertyState(ChatState.Answer, "Ответ", Brushes.DarkMagenta,true),
-                new PropertyState(ChatState.Answer, "Ожидание", Brushes.DarkMagenta,true)
+                new PropertyState(ChatState.Wait, "Ожидание", Brushes.DarkMagenta,true)
             };
         }
         public PropertyRepository(params PropertyState[] propertyStates) => _properties = propertyStates.ToList();
