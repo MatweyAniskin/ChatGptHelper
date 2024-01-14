@@ -88,8 +88,9 @@ namespace ChatGptHelper
         }
         private void UpdateWord()
         {
+            _wordController.Update();
             bool isWord = _wordController.IsDocs;
-            wordActionBox.Visibility = docListBox.Visibility = isWord ? Visibility.Visible : Visibility.Collapsed;
+            wordActionBox.Visibility = docListBox.Visibility = isWord ? Visibility.Visible : Visibility.Hidden;
             if (!isWord)
                 return;
             docListBox.ItemsSource = _wordController.Documents;
@@ -152,6 +153,8 @@ namespace ChatGptHelper
         private void pasteWord_Click(object sender, RoutedEventArgs e) => _wordController.AddCursorText(questionsBox.Text);
 
         private void swapWord_Click(object sender, RoutedEventArgs e) => _wordController.SwapText(questionsBox.Text);
+
+        private void updateButton_Click(object sender, RoutedEventArgs e) => UpdateWord();
     }
 
 }

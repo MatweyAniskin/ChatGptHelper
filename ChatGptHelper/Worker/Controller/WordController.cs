@@ -63,10 +63,7 @@ namespace WordWorker.Worker.Controller
 
         public bool IsDocs => _isApplicationInstall && _word.Documents.Count > 0;
 
-        public WordController()
-        {            
-            Update();
-        }        
+                
         public CallType AddText(string text)
         {
             if (ActiveDocument is null)

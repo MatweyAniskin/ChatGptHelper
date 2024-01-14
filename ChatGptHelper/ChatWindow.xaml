@@ -24,11 +24,26 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*"/>
                 <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <ComboBox Grid.Row="0" Name="docListBox" SelectionChanged="docListBox_SelectionChanged" Margin="5,0,5,0">
                 
             </ComboBox>
-            <Button Content="_" Name="closeButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="1" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>            
+            <Button Name="updateButton" Click="updateButton_Click" HorizontalAlignment="Center" Grid.Column="1" Width="40" Style="{DynamicResource MaterialDesignPaperButton}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Images/DocUpdate.png" TileMode="None" Stretch="Uniform">
+                        <ImageBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="0.7" ScaleY="0.7"/>
+                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                <RotateTransform CenterX="0.5" CenterY="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ImageBrush.RelativeTransform>
+                    </ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="_" Name="closeButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="2" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>            
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
