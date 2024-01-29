@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ChatGptHelper.Models
 {
-    public enum ChatState { Question, Answer, Wait}
+    public enum ChatState { Question, Answer, Wait }
 }

@@ -2,13 +2,14 @@
 using ChatGptHelper.ChatApi.Model;
 using ChatGptHelper.Models;
 using ChatGptHelper.Utilities;
+using HtmlParser;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Input;
 using WordWorker.Controller;
 using WordWorker.Worker.Controller;
 using WordWorker.Worker.Model;
@@ -24,6 +25,7 @@ namespace ChatGptHelper
     {
         IWordController _wordController;
         ChatState _curState;
+        IParse _parse;
         PropertyRepository _propertyRepository;
         Forms.NotifyIcon _notifyIcon;
         GlobalKeyboardHook _keyboardHook = new GlobalKeyboardHook();
@@ -40,11 +42,12 @@ namespace ChatGptHelper
         {
             InitializeComponent();
             ChatController.Key = Settings.Settings.Data.ApiKey;
-            _wordController = new WordController();            
+            _wordController = new WordController();
             _propertyRepository = new PropertyRepository();
+            _parse = new HtmlParse();
             CurState = ChatState.Question;
             SetNotify();
-            SetDefaultSendButton();            
+            SetDefaultSendButton();
             SetKeys();
             UpdateWord();
         }
@@ -118,7 +121,15 @@ namespace ChatGptHelper
         }
         private async Task SendToBot(string messages)
         {
-            if(CurState == ChatState.Wait) return;
+            if (CurState == ChatState.Wait) return;
+            string urlPattern = @"https?://[^\s]+";
+            MatchCollection matches = Regex.Matches(messages, urlPattern);
+            foreach (Match match in matches)
+            {
+                string url = match.Value;
+                string urlText = _parse.HtmlParsing("p",url);
+                messages = messages.Replace(url,$" \"{urlText}\" ");
+            }
             CurState = ChatState.Wait;
             var result = (ChatResult)(await ChatController.SendAsync(messages));
             CurState = ChatState.Answer;

@@ -52,7 +52,7 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Label VerticalAlignment="Center" Name="actionTypeQuestionBox" Margin="15,0,0,0" Style="{DynamicResource MaterialDesignLabel}">Вопрос</Label>
-            <TextBox Margin="5,0,5,0" Text=""                
+            <TextBox Margin="5,0,5,0" Text=""          
                 Grid.Row="1" Grid.ColumnSpan="3" TextWrapping="Wrap" 
                 Name="questionsBox" VerticalScrollBarVisibility="Visible" AcceptsReturn="True"
                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
