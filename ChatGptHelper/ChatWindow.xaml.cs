@@ -29,6 +29,7 @@ namespace ChatGptHelper
         PropertyRepository _propertyRepository;
         Forms.NotifyIcon _notifyIcon;
         GlobalKeyboardHook _keyboardHook = new GlobalKeyboardHook();
+        bool _checkSystem = true; //temp
         ChatState CurState
         {
             get => _curState;
@@ -130,6 +131,8 @@ namespace ChatGptHelper
                 string urlText = _parse.HtmlParsing("p",url);
                 messages = messages.Replace(url,$" \"{urlText}\" ");
             }
+            if(_checkSystem) //temp
+                messages = $"{Settings.Settings.Data.SystemPrompt}\n{messages}";
             CurState = ChatState.Wait;
             var result = (ChatResult)(await ChatController.SendAsync(messages));
             CurState = ChatState.Answer;
@@ -167,6 +170,12 @@ namespace ChatGptHelper
         private void swapWord_Click(object sender, RoutedEventArgs e) => _wordController.SwapText(questionsBox.Text);
 
         private void updateButton_Click(object sender, RoutedEventArgs e) => UpdateWord();
+
+        private void swapSettings_Click(object sender, RoutedEventArgs e)
+        {
+            _checkSystem = !_checkSystem;
+            swapSettings.Content = _checkSystem ? '+' : '-';
+        }
     }
 
 }

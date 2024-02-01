@@ -22,14 +22,16 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="20*"/>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Row="0" Name="docListBox" SelectionChanged="docListBox_SelectionChanged" Margin="5,0,5,0">
+            <Button Content="+" Name="swapSettings" Click="swapSettings_Click" HorizontalAlignment="Center" Grid.Column="0" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>
+            <ComboBox Grid.Column="1" Name="docListBox" SelectionChanged="docListBox_SelectionChanged" Margin="5,0,5,0">
                 
             </ComboBox>
-            <Button Name="updateButton" Click="updateButton_Click" HorizontalAlignment="Center" Grid.Column="1" Width="40" Style="{DynamicResource MaterialDesignPaperButton}">
+            <Button Name="updateButton" Click="updateButton_Click" HorizontalAlignment="Center" Grid.Column="2" Width="40" Style="{DynamicResource MaterialDesignPaperButton}">
                 <Button.Background>
                     <ImageBrush ImageSource="/Images/DocUpdate.png" TileMode="None" Stretch="Uniform">
                         <ImageBrush.RelativeTransform>
@@ -43,7 +45,7 @@
                     </ImageBrush>
                 </Button.Background>
             </Button>
-            <Button Content="_" Name="closeButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="2" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>            
+            <Button Content="_" Name="closeButton" Click="closeButton_Click" HorizontalAlignment="Center" Grid.Column="3" Width="40" Style="{DynamicResource MaterialDesignPaperButton}"/>            
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
