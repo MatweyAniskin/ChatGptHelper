@@ -150,6 +150,9 @@
     <Compile Include="ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DocumentCreateWindow.xaml.cs">
+      <DependentUpon>DocumentCreateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HtmlParse\HtmlParse.cs" />
     <Compile Include="HtmlParse\IParse.cs" />
     <Compile Include="Models\ChatState.cs" />
@@ -168,6 +171,10 @@
     <Compile Include="Worker\IWordController.cs" />
     <Compile Include="Worker\Model\WordDoc.cs" />
     <Page Include="ChatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DocumentCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
