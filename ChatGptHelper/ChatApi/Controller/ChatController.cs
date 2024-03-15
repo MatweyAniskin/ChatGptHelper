@@ -15,7 +15,7 @@ namespace ChatGptHelper.ChatApi.Controller
        public static string Url { get; private set; } = "https://ask.chadgpt.ru/api/public/gpt-3.5";
        public static string Key { get; set; }
        public static string SystemPrompt { get; set; } = string.Empty;
-       public static async Task<ChatResult> SendAsync(string message)
+       public static async Task<ChatResult> Send(string message)
        {           
             using (var client = new HttpClient())
             {
@@ -25,6 +25,15 @@ namespace ChatGptHelper.ChatApi.Controller
                 
                 return data;
             }           
-       }       
+       }
+       public static async Task<string> Send(string[] messages, string addPrompt)
+       {
+            string result = string.Empty;
+            foreach(var i in messages)
+            {
+                if (addPrompt == "")
+                    result = $"{await Send(i)}";
+            }
+       }
     }
 }

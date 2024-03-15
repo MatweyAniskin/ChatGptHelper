@@ -134,7 +134,7 @@ namespace ChatGptHelper
             if(_checkSystem) //temp
                 messages = $"{Settings.Settings.Data.SystemPrompt}\n{messages}";
             CurState = ChatState.Wait;
-            var result = (ChatResult)(await ChatController.SendAsync(messages));
+            var result = (ChatResult)(await ChatController.Send(messages));
             CurState = ChatState.Answer;
             questionsBox.Text = result.ToString();
         }
