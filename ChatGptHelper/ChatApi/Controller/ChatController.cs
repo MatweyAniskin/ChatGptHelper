@@ -26,6 +26,7 @@ namespace ChatGptHelper.ChatApi.Controller
                 return data;
             }           
        }
+<<<<<<< Updated upstream
        public static async Task<string> Send(string[] messages, string addPrompt)
        {
             string result = string.Empty;
@@ -35,5 +36,18 @@ namespace ChatGptHelper.ChatApi.Controller
                     result = $"{await Send(i)}";
             }
        }
+=======
+        public static async Task<string> MultiRequest(string[] messages) => await MultiRequest("", messages);
+        public static async Task<string> MultiRequest(string mainPrompt, string[] messages)
+        {
+            string text = string.Empty;
+            foreach(var message in messages) 
+            {
+                var result = (ChatResult)(await SendAsync($"{mainPrompt} {message}"));
+                text += $"{result}\n";
+            }
+            return text;
+        }
+>>>>>>> Stashed changes
     }
 }

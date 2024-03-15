@@ -2,7 +2,7 @@
 
 namespace WordWorker.Worker.Model
 {
-    internal class WordDoc
+    public class WordDoc
     {
         public Document Doc { get; protected set; }
 

@@ -8,10 +8,9 @@ using WordWorker.Worker.Model;
 
 namespace WordWorker.Controller
 {
-    internal interface IWordController
+    public  interface IWordController
     {
-        event EventHandler<EventArgs> OnNewActiveDoc;
-        
+        event EventHandler<EventArgs> OnNewActiveDoc;        
         WordDoc CurDocument { get; set; }
         IEnumerable<WordDoc> Documents { get; }
         bool IsDocs {  get; }
@@ -24,6 +23,8 @@ namespace WordWorker.Controller
         CallType GetDedicatedText(out string text);
 
         CallType GetAllText(out string text);
-        
+        CallType CreateDoc(string name, string text);
+
+
     }
 }

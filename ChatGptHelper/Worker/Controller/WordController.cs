@@ -61,9 +61,7 @@ namespace WordWorker.Worker.Controller
             } 
         }
 
-        public bool IsDocs => _isApplicationInstall && _word.Documents.Count > 0;
-
-                
+        public bool IsDocs => _isApplicationInstall && _word.Documents.Count > 0;                
         public CallType AddText(string text)
         {
             if (ActiveDocument is null)
@@ -111,8 +109,19 @@ namespace WordWorker.Worker.Controller
             int pos = _word.Selection.Range.Start;
             ActiveDocument.Content.Text = ActiveDocument.Content.Text.Insert(pos, text);
             return CallType.Success;
+                    }
+        public CallType CreateDoc(string name,string text)
+        {           
+            Word.Application wordApp = new Word.Application();
+            Word.Document doc = wordApp.Documents.Add();
+            Word.Paragraph para = doc.Paragraphs.Add();
+            para.Range.Text = text;
+            object filename = @"C:\Users\Admin\Desktop\Example.docx";
+            doc.SaveAs2(filename);
+            doc.Close();
+            wordApp.Quit();
+            return CallType.Success;
         }
-
         public void Update()
         {
             try

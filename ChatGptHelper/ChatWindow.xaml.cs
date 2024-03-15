@@ -23,6 +23,7 @@ namespace ChatGptHelper
     /// </summary>
     public partial class ChatWindow : Window
     {
+        CreateDocumentWindow _documentWindow;
         IWordController _wordController;
         ChatState _curState;
         IParse _parse;
@@ -44,6 +45,7 @@ namespace ChatGptHelper
             InitializeComponent();
             ChatController.Key = Settings.Settings.Data.ApiKey;
             _wordController = new WordController();
+            _documentWindow = new CreateDocumentWindow(_wordController);
             _propertyRepository = new PropertyRepository();
             _parse = new HtmlParse();
             CurState = ChatState.Question;
@@ -169,7 +171,7 @@ namespace ChatGptHelper
 
         private void swapWord_Click(object sender, RoutedEventArgs e) => _wordController.SwapText(questionsBox.Text);
 
-        private void updateButton_Click(object sender, RoutedEventArgs e) => UpdateWord();
+        private void updateButton_Click(object sender, RoutedEventArgs e) => _documentWindow.Show(); //UpdateWord();
 
         private void swapSettings_Click(object sender, RoutedEventArgs e)
         {
