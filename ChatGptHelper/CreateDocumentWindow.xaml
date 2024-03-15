@@ -39,6 +39,7 @@
             <TextBox materialDesign:HintAssist.Hint="Название документа" TextWrapping="Wrap" 
         Text="" Width="350" Grid.Row="0" Grid.ColumnSpan="3"
         Name="nameFileBox"
+        MouseDoubleClick="nameFileBox_MouseDoubleClick"
         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"/>
             <TextBox materialDesign:HintAssist.Hint="Тема" TextWrapping="Wrap" 
             Text="" Width="350" Grid.Row="1"  Grid.ColumnSpan="3"

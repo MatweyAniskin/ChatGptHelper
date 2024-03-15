@@ -26,28 +26,17 @@ namespace ChatGptHelper.ChatApi.Controller
                 return data;
             }           
        }
-<<<<<<< Updated upstream
-       public static async Task<string> Send(string[] messages, string addPrompt)
-       {
-            string result = string.Empty;
-            foreach(var i in messages)
-            {
-                if (addPrompt == "")
-                    result = $"{await Send(i)}";
-            }
-       }
-=======
+
         public static async Task<string> MultiRequest(string[] messages) => await MultiRequest("", messages);
         public static async Task<string> MultiRequest(string mainPrompt, string[] messages)
         {
             string text = string.Empty;
             foreach(var message in messages) 
             {
-                var result = (ChatResult)(await SendAsync($"{mainPrompt} {message}"));
+                var result = (ChatResult)(await Send($"{mainPrompt} {message}"));
                 text += $"{result}\n";
             }
             return text;
         }
->>>>>>> Stashed changes
     }
 }

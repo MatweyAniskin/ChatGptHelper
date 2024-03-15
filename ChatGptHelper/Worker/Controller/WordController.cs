@@ -110,13 +110,12 @@ namespace WordWorker.Worker.Controller
             ActiveDocument.Content.Text = ActiveDocument.Content.Text.Insert(pos, text);
             return CallType.Success;
                     }
-        public CallType CreateDoc(string name,string text)
+        public CallType CreateDoc(string filename,string text)
         {           
             Word.Application wordApp = new Word.Application();
             Word.Document doc = wordApp.Documents.Add();
             Word.Paragraph para = doc.Paragraphs.Add();
-            para.Range.Text = text;
-            object filename = @"C:\Users\Admin\Desktop\Example.docx";
+            para.Range.Text = text;            
             doc.SaveAs2(filename);
             doc.Close();
             wordApp.Quit();
